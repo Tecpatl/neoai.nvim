@@ -72,6 +72,33 @@ M.get_defaults = function()
                     error(msg)
                 end,
             },
+            api_base = {
+                 env = "OPENAI_API_BASE",
+                 value = nil,
+                 get = function()
+                    local open_api_base = nil
+                    if M.options.open_ai.api_base.value then
+                        open_api_base = M.options.open_ai.api_base.value
+                    else
+                        local env_name
+                        if M.options.open_api_base_env then
+                            env_name = M.options.open_api_base_env
+                            logger.deprecation("config.open_api_base_env", "config.open_ai.api_base.env")
+                        else
+                            env_name = M.options.open_ai.api_base.env
+                        end
+                        open_api_base = os.getenv(env_name)
+                    end
+
+                    if open_api_base then
+                        return open_api_base
+                    end
+                    local msg = M.options.open_ai.api_base.env
+                        .. " environment variable is not set, and open_api_base.value is empty"
+                    logger.error(msg)
+                    error(msg)
+                 end
+            }
         },
         shortcuts = {
             {
@@ -149,7 +176,7 @@ end
 ---@field inject Inject_Options The inject options
 ---@field prompts Prompt_Options The custom prompt options
 ---@field open_api_key_env string The environment variable that contains the openai api key
----@field open_ai Open_AI_Options The open api key options
+---@field open_api_base_env string The environment variable that contains the openai api base
 ---@field mappings table<"select_up" | "select_down", nil|string|string[]> A table of actions with it's mapping(s)
 ---@field shortcuts Shortcut[] Array of shortcuts
 M.options = {}
