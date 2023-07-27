@@ -213,8 +213,8 @@ end
 -- the '<Esc>' or <Ctrl-c> key triggers the 'neoai.ui' module's 'destroy_ui' function, which
 M.set_destroy_key_mappings = function(input_buffer)
     local mappings = {
-        "<Esc>",
-        "<C-c>",
+        --"<Esc>",
+        --"<C-c>",
     }
     for _, key in ipairs(mappings) do
         vim.api.nvim_buf_set_keymap(
